@@ -62,48 +62,6 @@ function SignUP() {
   const [state, dispatch] = useReducer(reducer, initialStates);
   const navigate = useNavigate();
 
-  // const user = firebase.auth().currentUser;
-
-  // if (user) {
-  //   // Check the user's custom claims to determine their role
-  //   const idTokenResult = await user.getIdTokenResult();
-  //   const userRole = idTokenResult.claims.role;
-
-  //   if (userRole === 'admin') {
-  //     // Grant admin privileges
-  //   } else if (userRole === 'employee') {
-  //     // Grant employee privileges
-  //   } else {
-  //     // Handle unknown role or unauthorized access
-  //   }
-  // }
-
-  // const unsubscribeOnAuthStateChanged = auth.onAuthStateChanged(
-  //   async (user) => {
-  //     if (user) {
-  //       // User is authenticated
-  //       try {
-  //         const idTokenResult = await user.getIdTokenResult();
-  //         const customClaims = idTokenResult.claims;
-
-  //         // Check the user's role
-  //         if (customClaims.role === "admin") {
-  //           console.log("User is an admin");
-  //           // User is an admin
-  //           // Redirect to admin dashboard or show admin-specific content
-  //         } else {
-  //           console.log("User is an employee");
-  //           // User is an employee
-  //           // Redirect to employee dashboard or show employee-specific content
-  //         }
-  //       } catch (error) {
-  //         console.error("Error getting custom claims:", error);
-  //       }
-  //     } else {
-  //       // User is not authenticated
-  //     }
-  //   }
-  // );
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -144,7 +102,7 @@ function SignUP() {
           uid: user.uid,
           name: state.name,
           email: state.email,
-          role: auth.currentUser.getIdTokenResult() ? "employee" : "admin",
+          // role: auth.currentUser.getIdTokenResult() ? "employee" : "admin",
         };
         // // Store user data in cloud forestore under their UID
         try {
@@ -167,8 +125,7 @@ function SignUP() {
           toastId: "all_validation_passed",
         });
         dispatch({ type: "RESET_FORM", payload: "" });
-        // dispatch({ type: "SET_EMAIL", payload: "" });
-        // dispatch({ type: "SET_PASSWORD", payload: "" });
+       
       } catch (error) {
         if (error.code === "auth/email-already-in-use") {
           // To-Do - emit toast for email already exist and use toastId for it
@@ -184,8 +141,7 @@ function SignUP() {
         }
       }
     }
-    // dispatch({ type: "SET_SUBMIT_BTN_DISABLE", payload: false });
-    // dispatch({type:"RESET_FORM"})
+    
   };
   return (
     <>

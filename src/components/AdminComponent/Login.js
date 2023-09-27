@@ -4,7 +4,7 @@ import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faEye, faEyeSlash } from "@fortawesome/free-solid-svg-icons";
-import { Link, useNavigate } from "react-router-dom";
+import { Link, useLocation, useNavigate } from "react-router-dom";
 import { auth } from "../../firebase";
 import { signInWithEmailAndPassword } from "firebase/auth";
 // import LoadingSpinner from "./LoadingSpinner";
@@ -20,7 +20,7 @@ const reducer = (state, action) => {
   switch (action.type) {
     case "RESET_FORM":
       return {
-        initialStates,
+        ...initialStates,
       };
     case "SET_EMAIL":
       return {
@@ -50,13 +50,16 @@ const reducer = (state, action) => {
 };
 
 function Login() {
+  const location = useLocation();
+  console.log("pathname:", location.pathname);
   const { setUserRole } = useAuth(); // Get setUserRole function from context
   const [state, dispatch] = useReducer(reducer, initialStates);
   const navigate = useNavigate();
+
   const handleSubmit = async (e) => {
     e.preventDefault();
-    // To-Do set loading to true here
-    dispatch({ case: "SET_LOADING", payload: true });
+    // Set loading to true when the form is submitted
+    dispatch({ type: "SET_LOADING", payload: true });
     if (!state.email || !state.password) {
       // Display a toast message if any field is empty
       toast.error(
@@ -69,10 +72,14 @@ function Login() {
           exit: "animate__animated animate__bounceOut",
         }
       );
+      // Set loading back to false since the form submission failed
+      dispatch({ type: "SET_LOADING", payload: false });
     } else if (state.password.length < 8) {
       toast.error("Password must be at least 8 characters", {
         toastId: "all_characters_filled",
       });
+      // Set loading back to false since the form submission failed
+      dispatch({ type: "SET_LOADING", payload: false });
     } else {
       try {
         // Create a new user account with Firebase
@@ -91,7 +98,7 @@ function Login() {
           toastId: "all_validation_passed",
         });
         const userClaims = await auth.currentUser.getIdTokenResult();
-
+        const path = location.pathname;
         if (userClaims.claims?.admin) {
           console.log("User is an admin.");
           setUserRole("admin");
@@ -120,20 +127,19 @@ function Login() {
               toastId: "Email_already_exist",
             });
           }
+          // set loading to false here
+          dispatch({ type: "SET_LOADING", payload: false });
         }
       }
     }
-
-    // set loading to false here
-    dispatch({ type: "SET_LOADING", payload: false });
   };
   return (
     <>
-      <div className="w-screen h-screen bg-purple-400 absolute">
-        <div className="w-[900px] h-[500px] background bg-slate-50 absolute left-[270px] top-24 justify-center rounded-2xl px-2 py-2">
+      <div className="w-full h-full bg-purple-400 absolute">
+        <div className="w-[900px] h-[500px] shadow-lg background bg-slate-50 absolute left-[270px] top-24 justify-center rounded-2xl px-2 py-2">
           <div>
             <h1 className="text-3xl absolute left-[200px] top-[45px] text-purple-800 font-bold">
-              Login
+              Admin Login
             </h1>
             <h1 className="text-2xl font-bold ml-44 top-[95px] text-purple-800 absolute">
               Hello Friends!
@@ -189,6 +195,11 @@ function Login() {
               >
                 {state.loading ? "Loading..." : "Submit"}
               </button>
+              {/* {state.loading && (
+                <div>
+                  Loading...
+                </div>
+              )} */}
               <h4 className="top-[400px] absolute ml-28 text-purple-800">
                 Don't have an account?
                 <Link

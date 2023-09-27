@@ -20,6 +20,9 @@ import EmpPrivateRoutes from "./components/EmployeeComponet/EmpPrivateRoutes";
 import Page404 from "./components/Page404";
 import { useAuth } from "./components/AuthContext";
 import Employees from "./components/AdminComponent/Employees";
+import AddEmployee from "./components/AdminComponent/AddEmployee";
+import EmpProfile from "./components/EmployeeComponet/EmpProfile";
+import EmpAttendance from "./components/EmployeeComponet/EmpAttendance";
 
 function App() {
   // const { userRole } = useAuth(); // Get the user's role from
@@ -35,19 +38,21 @@ function App() {
         <Route path="/" element={<Home />} />
         <Route path="*" element={<Page404 />} />
         <Route path="/login" element={<Login />} />
-        <Route path="/signUp" element={<SignUp />} />
+        {/* <Route path="/signUp" element={<SignUp />} /> */}
         <Route element={<AdminPrivateRoutes />}>
           <Route path="/adminDashboard" element={<AdminDashboard />} />
           <Route path="/qrCode" element={<QRCodeGenerate />} />
           <Route path="/employees" element={<Employees />} />
+          <Route path="/empsignUp" element={<EmpSignUP />} />
+          <Route path="/addEmployee" element={<AddEmployee />} />
         </Route>
-        
 
-        <Route path="/empsignUp" element={<EmpSignUP />} />
-        <Route path="/empLogin" element={<EmpLogin />} />
+        {/* <Route path="/empLogin" element={<EmpLogin />} /> */}
+
         <Route element={<EmpPrivateRoutes />}>
           <Route path="/empDashboard" element={<EmployeeDsahboard />} />
           <Route path="/scanner" element={<QRCodeScanner />} />
+          <Route path="/attendance" element={<EmpAttendance />} />
         </Route>
 
         {/* <Route path="/qrCodegen" element={<QRCodeGenerate />} />
@@ -62,8 +67,8 @@ function App() {
 
 export default App;
 
-
- {/* <Route path="/" element={<Home />} />
+{
+  /* <Route path="/" element={<Home />} />
         {USER_ROLES === "ADMIN_USER" ? (
           <Route
           path="/AdminComponent/*" // Nested routes for admin
@@ -74,16 +79,23 @@ export default App;
           path="/EmployeeComponent/*" // Nested routes for employee
           element={<EmpPrivateRoutes />}
         />
-        )} */}
+        )} */
+}
 
-        {/* <Route path="/dashboard" element={<SidebarLinkGroup /> } /> */}
+{
+  /* <Route path="/dashboard" element={<SidebarLinkGroup /> } /> */
+}
 
-        {/* Use Route components for admin and employee routes */}
-        {/* <Route
+{
+  /* Use Route components for admin and employee routes */
+}
+{
+  /* <Route
           path="/AdminComponent/*" // Nested routes for admin
           element={<AdminPrivateRoutes />}
         />
         <Route
           path="/EmployeeComponent/*" // Nested routes for employee
           element={<EmpPrivateRoutes />}
-        /> */}
+        /> */
+}

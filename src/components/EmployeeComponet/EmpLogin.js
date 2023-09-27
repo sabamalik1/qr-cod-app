@@ -4,57 +4,59 @@ import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faEye, faEyeSlash } from "@fortawesome/free-solid-svg-icons";
-import { Link , useNavigate } from "react-router-dom";
+import { Link, useLocation, useNavigate } from "react-router-dom";
 import { auth } from "../../firebase";
 import { useAuth } from "../AuthContext";
 import { signInWithEmailAndPassword } from "firebase/auth";
 
-const initialStates = {
-  name: "",
-  email: "",
-  password: "",
-  showPassword: false,
-  loading: false,
-};
-const reducer = (state, action) => {
-  switch (action.type) {
-    case "SET_EMAIL":
-      return {
-        ...state,
-        email: action.payload,
-      };
-    case "SET_PASSWORD":
-      return {
-        ...state,
-        password: action.payload,
-      };
-    case "TOGGLE_PASSWORD_VISIBILITY":
-      return {
-        ...state,
-        showPassword: !state.showPassword,
-      };
-      case "SET_LOADING":
-      return {
-        ...state,
-        loading: action.payload,
-      };
-      case "RESET_FORM":
-        return {
-          initialStates,
-        };
+// const initialStates = {
+//   name: "",
+//   email: "",
+//   password: "",
+//   showPassword: false,
+//   loading: false,
+// };
+// const reducer = (state, action) => {
+//   switch (action.type) {
+//     case "SET_EMAIL":
+//       return {
+//         ...state,
+//         email: action.payload,
+//       };
+//     case "SET_PASSWORD":
+//       return {
+//         ...state,
+//         password: action.payload,
+//       };
+//     case "TOGGLE_PASSWORD_VISIBILITY":
+//       return {
+//         ...state,
+//         showPassword: !state.showPassword,
+//       };
+//     case "SET_LOADING":
+//       return {
+//         ...state,
+//         loading: action.payload,
+//       };
+//     case "RESET_FORM":
+//       return {
+//         initialStates,
+//       };
 
-    default:
-      return state;
-  }
-};
+//     default:
+//       return state;
+//   }
+// };
 
 function EmpLogin() {
-  const { setUserRole } = useAuth(); // Get setUserRole function from context
+  const location = useLocation();
+  // console.log(location.pathname);
+  const { setUserRole, initialStates, reducer } = useAuth(); // Get setUserRole function from context
   const [state, dispatch] = useReducer(reducer, initialStates);
-const navigate = useNavigate()
+  const navigate = useNavigate();
   const handleSubmit = async (e) => {
     e.preventDefault();
-dispatch({type:"SET_LOADING" })
+    dispatch({ type: "SET_LOADING" });
     if (!state.email || !state.password) {
       // Display a toast message if any field is empty
       toast.error(
@@ -81,13 +83,14 @@ dispatch({type:"SET_LOADING" })
         );
 
         const user = userCredential.user;
-        navigate("/")
+        // navigate("/")
 
         toast.success("Registration successful", {
           toastId: "all_validation_passed",
         });
         const userClaims = await auth.currentUser.getIdTokenResult();
 
+        const path = location.pathname;
         if (userClaims.claims?.admin) {
           console.log("User is an admin.");
           setUserRole("admin");
@@ -97,12 +100,10 @@ dispatch({type:"SET_LOADING" })
           console.log("User is not an admin.");
           navigate("/empDashboard");
         }
-        
-        dispatch({ type: "RESET_FORM", payload: "" });
-        
 
+        dispatch({ type: "RESET_FORM", payload: "" });
       } catch (error) {
-        if(error.code === "auth/wrong-password") {
+        if (error.code === "auth/wrong-password") {
           toast.error("Incorrect password. Please try again.", {
             toastId: "incorrect_password",
           });
@@ -117,7 +118,6 @@ dispatch({type:"SET_LOADING" })
             });
           }
         }
-        
       }
     }
   };
@@ -188,7 +188,9 @@ dispatch({type:"SET_LOADING" })
                 <Link
                   className="text-xl font-semibold hover:bg-purple-500"
                   to="/signUp"
-                >SignUp</Link>
+                >
+                  SignUp
+                </Link>
               </h4>
               {/* {state.errorMsg && (
                 <div className="text-red-500 text-center top-[390px] absolute ml-28">

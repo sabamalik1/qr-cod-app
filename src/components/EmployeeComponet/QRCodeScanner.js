@@ -18,11 +18,7 @@ import { db } from "../../firebase";
 import { onAuthStateChanged } from "firebase/auth";
 
 function QRCodeScanner() {
-  // const [delay, setDelay] = useState(100);
-  // const [result, setResult] = useState("No Result");
-  // const [isCameraOpen, setIsCameraOpen] = useState(false);
-  // const [qrCodeContent, setQRCodeContent] = useState("");
-  // const [currentUser, setCurrentUser] = useState(null);
+  
   const [validating, setValidating] = useState(false);
 
   // useEffect(() => {
@@ -65,10 +61,9 @@ function QRCodeScanner() {
     const uid = auth.currentUser.uid;
     const userName = user.displayName;
     const email = user.email;
-    
-      // Fetch the user data based on UID
-      // const user = await getUser(auth, uid);
-     
+
+    // Fetch the user data based on UID
+    // const user = await getUser(auth, uid);
 
     // Create date and time objects using the Date constructor
     const currentDate = new Date();
@@ -83,8 +78,9 @@ function QRCodeScanner() {
     if (docSnap.exists()) {
       const attendanceData = docSnap.data();
 
-      const isMarked = attendanceData.dates.some((date) => {
-        const dateFromDB = new Date(date.seconds * 1000)
+      const isMarked = attendanceData.dates.some((dateObj) => {
+        // alert(JSON.stringify(dateObj));
+        const dateFromDB = new Date(dateObj.date.seconds * 1000)
           .toISOString()
           .split("T")[0];
         const currentDateISO = currentDate.toISOString().split("T")[0];
@@ -95,8 +91,7 @@ function QRCodeScanner() {
       if (!isMarked) {
         attendanceData.dates.push({
           date: currentDate,
-            inTime: currentDate,
-            status: "Present",
+          status: "Present",
         });
 
         // const inTime = currentDate.toISOString()
@@ -117,36 +112,27 @@ function QRCodeScanner() {
       // Push the data in existing dates array and set it
     } else {
       // To-Do let create a new document
-      const formattedDate = currentDate.toLocaleDateString(); // Format the date
-      const formattedTime = currentDate.toLocaleTimeString(); // Format the time
       const newAttendanceData = {
         userName, // Use userName instead of UserName
-        email,    // Use email instead of email
+        email, // Use email instead of email
         dates: [
           {
-            date: formattedDate,
-            inTime: formattedTime,
+            date: currentDate,
+            // inTime: formattedTime,
             status: "Present",
           },
         ],
       };
-      
-      // const data = { dates: [currentDate] };
-      // const inTime = currentDate.toISOString(); // Store the current timestamp as inTime
-      // const status = "Present";
 
-      // const data = { dates: [{
-      //   date: currentDate,
-      //   inTime: inTime,
-      //   status: status,
-      // }] };
+      // const data = { dates: [currentDate] };
+     
       // Create an array of dates and push the data in it and set it
       // await setDoc(docRef, data, { merge: true });
       // alert("Month not exist");
       // // docSnap.data() will be undefined in this case
       // return false;
-      await setDoc(docRef, newAttendanceData)
-      alert("Attendance marked")
+      await setDoc(docRef, newAttendanceData);
+      alert("Attendance marked");
     }
   };
 
@@ -178,7 +164,6 @@ function QRCodeScanner() {
     //   console.error("User not authenticated.");
     // }
   };
-
 
   return (
     <div>
@@ -222,65 +207,61 @@ function QRCodeScanner() {
 
 export default QRCodeScanner;
 
-
-
 // const validateQRCode = (code) => {
-  //   if (currentUser) {
-  //     // Extract UID and timestamp from the QR code
-  //     const [uid, timestamp] = code.split(":");
+//   if (currentUser) {
+//     // Extract UID and timestamp from the QR code
+//     const [uid, timestamp] = code.split(":");
 
-  //     // Perform Firebase database operations to validate and mark attendance
-  //     const db = app.database();
-  //     const date = new Date().toLocaleDateString();
-  //     const time = new Date().toLocaleTimeString();
+//     // Perform Firebase database operations to validate and mark attendance
+//     const db = app.database();
+//     const date = new Date().toLocaleDateString();
+//     const time = new Date().toLocaleTimeString();
 
-  //     // Check if the code is valid and mark attendance
-  //     db.ref(`code/${uid}`).once("value", (snapshot) => {
-  //       const savedCode = snapshot.val();
+//     // Check if the code is valid and mark attendance
+//     db.ref(`code/${uid}`).once("value", (snapshot) => {
+//       const savedCode = snapshot.val();
 
-  //       if (code === savedCode) {
-  //         const attendanceRef = db.ref(`employee/${currentUser.uid}/attendance/${date}`);
+//       if (code === savedCode) {
+//         const attendanceRef = db.ref(`employee/${currentUser.uid}/attendance/${date}`);
 
-  //         attendanceRef.once("value", (attendanceSnapshot) => {
-  //           const attendance = attendanceSnapshot.val();
+//         attendanceRef.once("value", (attendanceSnapshot) => {
+//           const attendance = attendanceSnapshot.val();
 
-  //           if (!attendance) {
-  //             const newAttendance = {
-  //               in: time,
-  //               status: "present",
-  //             };
+//           if (!attendance) {
+//             const newAttendance = {
+//               in: time,
+//               status: "present",
+//             };
 
-  //             attendanceRef.set(newAttendance);
-  //             console.log("In Time marked");
-  //           } else if (!attendance.out && attendance.status !== "leave") {
-  //             attendance.out = time;
-  //             attendanceRef.update(attendance);
-  //             console.log("Out Time marked");
-  //           } else {
-  //             console.log("Already Marked Attendance");
-  //           }
-  //         });
-  //       } else {
-  //         console.log("Invalid QR Code");
-  //       }
-  //     });
-  //   } else {
-  //     console.error("User not authenticated.");
-  //   }
-  // };
+//             attendanceRef.set(newAttendance);
+//             console.log("In Time marked");
+//           } else if (!attendance.out && attendance.status !== "leave") {
+//             attendance.out = time;
+//             attendanceRef.update(attendance);
+//             console.log("Out Time marked");
+//           } else {
+//             console.log("Already Marked Attendance");
+//           }
+//         });
+//       } else {
+//         console.log("Invalid QR Code");
+//       }
+//     });
+//   } else {
+//     console.error("User not authenticated.");
+//   }
+// };
 
-
-  
-  // const handleScan = (data) => {
-  //   setResult(data);
-  // };
-  // const handleError = (err) => {
-  //   console.error(err);
-  // };
-  // // const previewStyle = {
-  // //   height: 240,
-  // //   width: 320,
-  // // };
-  // const toggleCamera = () => {
-  //   setIsCameraOpen(!isCameraOpen);
-  // };
+// const handleScan = (data) => {
+//   setResult(data);
+// };
+// const handleError = (err) => {
+//   console.error(err);
+// };
+// // const previewStyle = {
+// //   height: 240,
+// //   width: 320,
+// // };
+// const toggleCamera = () => {
+//   setIsCameraOpen(!isCameraOpen);
+// };

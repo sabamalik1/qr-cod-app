@@ -58,12 +58,12 @@ export default function AdminDashboard() {
             >
               QR Code
             </Link>
-            <a
-              href="#"
+            <Link
+              to ={"/addEmployee"}
               className="text-gray-300 hover:bg-purple-400 hover:text-white px-4 py-2 rounded-md block"
             >
-              Profile
-            </a>
+              Add Employee
+            </Link>
             <button
               onClick={handleSignout}
               className="text-gray-300 hover:bg-purple-400 hover:text-white px-4 py-2 rounded-md block"

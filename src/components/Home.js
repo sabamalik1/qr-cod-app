@@ -30,10 +30,7 @@ function Home(props) {
           </h1>
           <h1>
             <Link to="/empSignUp">Employee</Link>
-          </h1>
-          <h1>
-            <Link to="/empLogin">EmployeeLogin</Link>
-          </h1>
+        </h1>
 
           {/* <h1>
             <Link to="/test" >Test</Link>

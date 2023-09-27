@@ -13,10 +13,10 @@ const user = {
 };
 const navigation = [
   { name: "Dashboard", href: "#", current: true },
-  { name: "Scanner", href: "#", current: false },
-  { name: "Attendance", href: "#", current: false },
-  { name: "Calendar", href: "#", current: false },
-  { name: "Logout", href: "#", current: false },
+  { name: "Scanner", to: "/scanner", current: false },
+  { name: "Attendance", to: "/Attendance", current: false },
+  // { name: "Calendar", href: "#", current: false },
+  { name: "Logout", to: "/login", current: false },
 ];
 const userNavigation = [
   { name: "Your Profile", href: "#" },
@@ -56,9 +56,9 @@ export default function EmployeeDashboard() {
                     <div className="hidden md:block">
                       <div className="ml-10 flex items-baseline space-x-4">
                         {navigation.map((item) => (
-                          <a
+                          <Link
                             key={item.name}
-                            href={item.href}
+                            to={item.to}
                             className={classNames(
                               item.current
                                 ? "bg-purple-900 text-white"
@@ -68,7 +68,7 @@ export default function EmployeeDashboard() {
                             aria-current={item.current ? "page" : undefined}
                           >
                             {item.name}
-                          </a>
+                          </Link>
                         ))}
                       </div>
                     </div>

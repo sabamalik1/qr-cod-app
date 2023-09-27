@@ -51,14 +51,14 @@ const reducer = (state, action) => {
     //   };
     case "RESET_FORM":
       return {
-        initialStates,
+        ...initialStates,
         // submitBtnDisable: false,
       };
-      case "SET_LOADING":
-        return {
-          ...state,
-          loading: action.payload,
-        };
+    case "SET_LOADING":
+      return {
+        ...state,
+        loading: action.payload,
+      };
     default:
       return state;
   }
@@ -68,58 +68,11 @@ function EmpSignUP() {
   const [state, dispatch] = useReducer(reducer, initialStates);
   // const navigate = useNavigate();
 
-  // const user = firebase.auth().currentUser;
-
-  // if (user) {
-  //   // Check the user's custom claims to determine their role
-  //   const idTokenResult = await user.getIdTokenResult();
-  //   const userRole = idTokenResult.claims.role;
-
-  //   if (userRole === 'admin') {
-  //     // Grant admin privileges
-  //   } else if (userRole === 'employee') {
-  //     // Grant employee privileges
-  //   } else {
-  //     // Handle unknown role or unauthorized access
-  //   }
-  // }
-
-  // const unsubscribeOnAuthStateChanged = auth.onAuthStateChanged(
-  //   async (user) => {
-  //     if (user) {
-  //       // User is authenticated
-  //       try {
-  //         const idTokenResult = await user.getIdTokenResult();
-  //         const customClaims = idTokenResult.claims;
-
-  //         // Check the user's role
-  //         if (customClaims.role === "admin") {
-  //           console.log("User is an admin");
-  //           // User is an admin
-  //           // Redirect to admin dashboard or show admin-specific content
-  //         } else {
-  //           console.log("User is an employee");
-  //           // User is an employee
-  //           // Redirect to employee dashboard or show employee-specific content
-  //         }
-  //       } catch (error) {
-  //         console.error("Error getting custom claims:", error);
-  //       }
-  //     } else {
-  //       // User is not authenticated
-  //     }
-  //   }
-  // );
-
   const handleSubmit = async (e) => {
     e.preventDefault();
-
-    // if (state.submitBtnDisable) {
-    //   return;
-    // }
-    // dispatch({ type: "SET_SUBMIT_BTN_DISABLE", payload: true });
-    // dispatch({type:"SET_SUBMIT_BTN_DISABLE", payload:true})
+    // Set loading to true when the form is submitted
     dispatch({ type: "SET_LOADING", payload: true });
+
     if (!state.email || !state.password || !state.name) {
       // Display a toast message if any field is empty
       toast.error(
@@ -132,10 +85,14 @@ function EmpSignUP() {
           exit: "animate__animated animate__bounceOut",
         }
       );
+      // Set loading back to false since the form submission failed
+      dispatch({ type: "SET_LOADING", payload: false });
     } else if (state.password.length < 8) {
       toast.error("Password must be at least 8 characters", {
         toastId: "all_characters_filled",
       });
+      // Set loading back to false since the form submission failed
+      dispatch({ type: "SET_LOADING", payload: false });
     } else {
       try {
         // Create a new user account with Firebase
@@ -146,14 +103,14 @@ function EmpSignUP() {
         );
 
         const user = userCredential.user;
-        dispatch({ type: "SET_LOADING", payload: false });
-        console.log("Loding in process")
+        // dispatch({ type: "SET_LOADING", payload: false });
+        // console.log("Loding in process")
         // Create an object with user data
         const userData = {
           uid: user.uid,
           name: state.name,
           email: state.email,
-          role: auth.currentUser.getIdTokenResult() ? "employee" : "admin",
+          // role: auth.currentUser.getIdTokenResult() ? "employee" : "admin",
         };
         // // Store user data in cloud forestore under their UID
         try {
@@ -170,16 +127,15 @@ function EmpSignUP() {
         await updateProfile(user, {
           displayName: state.name,
         });
-        // dispatch({ type: "SET_LOADING", payload: false });
-        console.log("LOading completed")
+        // Set loading back to false after successful authentication
+        dispatch({ type: "SET_LOADING", payload: false });
+        console.log("LOading completed");
         // navigate("/");
 
         toast.success("Registration successful", {
           toastId: "all_validation_passed",
         });
         dispatch({ type: "RESET_FORM", payload: "" });
-        // dispatch({ type: "SET_EMAIL", payload: "" });
-        // dispatch({ type: "SET_PASSWORD", payload: "" });
       } catch (error) {
         if (error.code === "auth/email-already-in-use") {
           // To-Do - emit toast for email already exist and use toastId for it
@@ -193,19 +149,18 @@ function EmpSignUP() {
           //   payload: "Email is already in use.",
           // });
         }
+        // Set loading back to false after handling errors
+        dispatch({ type: "SET_LOADING", payload: false });
       }
     }
-    dispatch({ type: "SET_LOADING", payload: false });
-    // dispatch({ type: "SET_SUBMIT_BTN_DISABLE", payload: false });
-    // dispatch({type:"RESET_FORM"})
   };
   return (
     <>
-      <div className="w-screen h-screen bg-purple-400 absolute">
-        <div className="w-[900px] h-[500px] background bg-slate-50 absolute left-[270px] top-24 justify-center rounded-2xl px-2 py-2">
+      <div className="w-full h-full bg-purple-400 absolute">
+        <div className="w-[900px] h-[500px] background bg-slate-50 shadow-lg absolute left-[270px] top-24 justify-center rounded-2xl px-2 py-2">
           <div>
             <h1 className="text-3xl absolute left-[200px] top-[18px] text-purple-800 font-bold">
-              SignUp
+              Employee SignUp
             </h1>
             <h1 className="text-2xl font-bold ml-44 top-[70px] text-purple-800 absolute">
               Hello, friends!
@@ -264,11 +219,16 @@ function EmpSignUP() {
               <button
                 onClick={handleSubmit}
                 type="button"
-                disabled={state.loading? true : false}
+                disabled={state.loading ? true : false}
                 className="top-[340px] bg-purple-500 text-white px-4 py-2 w-[280px] h-[40px] absolute left-[120px] rounded-md hover:bg-purple-400"
               >
                 {state.loading ? "Loading..." : "Submit"}
               </button>
+              {/* {state.loading && (
+                <div className="text-white absolute top-[370px] left-[120px]">
+                  Loading...
+                </div>
+              )} */}
               <h4 className="top-[420px] absolute ml-28 text-purple-800">
                 Already have an account?{" "}
                 <Link
@@ -297,3 +257,46 @@ function EmpSignUP() {
 }
 
 export default EmpSignUP;
+
+// const user = firebase.auth().currentUser;
+
+// if (user) {
+//   // Check the user's custom claims to determine their role
+//   const idTokenResult = await user.getIdTokenResult();
+//   const userRole = idTokenResult.claims.role;
+
+//   if (userRole === 'admin') {
+//     // Grant admin privileges
+//   } else if (userRole === 'employee') {
+//     // Grant employee privileges
+//   } else {
+//     // Handle unknown role or unauthorized access
+//   }
+// }
+
+// const unsubscribeOnAuthStateChanged = auth.onAuthStateChanged(
+//   async (user) => {
+//     if (user) {
+//       // User is authenticated
+//       try {
+//         const idTokenResult = await user.getIdTokenResult();
+//         const customClaims = idTokenResult.claims;
+
+//         // Check the user's role
+//         if (customClaims.role === "admin") {
+//           console.log("User is an admin");
+//           // User is an admin
+//           // Redirect to admin dashboard or show admin-specific content
+//         } else {
+//           console.log("User is an employee");
+//           // User is an employee
+//           // Redirect to employee dashboard or show employee-specific content
+//         }
+//       } catch (error) {
+//         console.error("Error getting custom claims:", error);
+//       }
+//     } else {
+//       // User is not authenticated
+//     }
+//   }
+// );
