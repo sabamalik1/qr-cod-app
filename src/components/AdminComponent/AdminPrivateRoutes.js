@@ -21,7 +21,7 @@ function AdminPrivateRoutes() {
     // if (pathRedirectTo === "/adminDashboard") {
     return (
       <>
-        <h1>AdminPrivateRoutes</h1>
+        {/* <h1>AdminPrivateRoutes</h1> */}
         <Outlet />
       </>
     );

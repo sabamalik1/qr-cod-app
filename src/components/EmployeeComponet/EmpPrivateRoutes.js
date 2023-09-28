@@ -15,7 +15,7 @@ function EmpPrivateRoutes() {
     // console.log("User is an employee from private routes");
     return (
       <>
-        <h1>EmployeePrivateRoutes</h1>
+        {/* <h1>EmployeePrivateRoutes</h1> */}
         <Outlet />
       </>
     );

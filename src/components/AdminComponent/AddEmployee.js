@@ -240,7 +240,7 @@ export default function AddEmployee() {
                   />
                   <button
                     type="button"
-                    className="top-[242px] left-[1000px] text-purple-500 absolute"
+                    className="top-[222px] left-[1000px] text-purple-500 absolute"
                     onClick={() =>
                       dispatch({
                         type: "TOGGLE_PASSWORD_VISIBILITY",
