@@ -1,5 +1,4 @@
 import React, { useState, useEffect } from "react";
-import { useParams } from "react-router-dom"; // If you are using React Router for routing
 import { auth, db } from "../../firebase";
 import {
   getDocs,
@@ -13,8 +12,8 @@ import { getAuth } from "firebase/auth";
 
 function EmpAttendance() {
   const [userData, setUserData] = useState({});
-  //   const { uid } = useParams(); // Get the UID from the route params (if you're using React Router)
-  const [attendanceData, setAttendanceData] = useState([]);
+  
+  // const [attendanceData, setAttendanceData] = useState([]);
   // const uid = "JCoBPCpBlqcjX0OLAu6bHp8fmhq2";
   useEffect(() => {
     const auth = getAuth();
@@ -86,11 +85,11 @@ function EmpAttendance() {
 
   return (
     <div>
-      <h1>Employee Informetion</h1>
+      <h1 className="text-2xl font-bold text-align justify-center text-purple-800 px-4 py-4  ">Employee Informetion</h1>
 
       <div>
         <div className="flex text-center justify-center  background px-3 py-3  ">
-          <div className=" p-5 rounded-lg shadow-lg mb-5 w-[600px] h-[350px] background bg-purple-700 mt-32  ">
+          <div className=" p-5 rounded-lg shadow-lg mb-5 w-[600px] h-[350px] background bg-purple-700 mt-20  ">
             
           <h1 className="text-3xl  text-center justify-center font-extrabold text-slate-100 mt-16 ">Welcome, {userData.name}</h1>
             <p className="text-2xl  text-center justify-center font-bold text-slate-100 mt-4 ">
@@ -108,18 +107,12 @@ function EmpAttendance() {
         </div>
       </div>
 
-      <ul>
-        {attendanceData.map((entry) => (
-          <li key={entry.date}>
-            <p>Date: {entry.date}</p>
-            <p>In-Time: {entry.in}</p>
-            {/* <p>Out-Time: {entry.out}</p> */}
-            <p>Status: {entry.status}</p>
-          </li>
-        ))}
-      </ul>
+     
     </div>
   );
 }
 
 export default EmpAttendance;
+
+
+

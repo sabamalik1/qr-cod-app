@@ -4,6 +4,7 @@ import { Bars3Icon, BellIcon, XMarkIcon } from "@heroicons/react/24/outline";
 import { Link } from "react-router-dom";
 import { auth } from "../../firebase";
 import { useAuth } from "../AuthContext";
+import EmpAttendance from "./EmpAttendance";
 
 const user = {
   name: "Tom Cook",
@@ -205,7 +206,7 @@ export default function EmployeeDashboard() {
 
         <header className="bg-white shadow">
           <div className="mx-auto max-w-7xl px-4 py-6 sm:px-6 lg:px-8">
-            <h1 className="text-3xl font-bold tracking-tight text-purple-900">
+            <h1 className="text-3xl font-bold tracking-tight text-purple-800">
               Dashboard
             </h1>
           </div>
@@ -213,6 +214,8 @@ export default function EmployeeDashboard() {
         <main>
           <div className="mx-auto max-w-7xl py-6 sm:px-6 lg:px-8">
             {/* Your content */}
+            <EmpAttendance />
+
             <h1>
             <Link to="/scanner">scanner</Link>
           </h1>
