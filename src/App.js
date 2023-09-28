@@ -23,6 +23,7 @@ import Employees from "./components/AdminComponent/Employees";
 import AddEmployee from "./components/AdminComponent/AddEmployee";
 import EmpProfile from "./components/EmployeeComponet/EmpProfile";
 import EmpAttendance from "./components/EmployeeComponet/EmpAttendance";
+import TotalEmployees from "./components/AdminComponent/TotalEmployees";
 
 function App() {
   // const { userRole } = useAuth(); // Get the user's role from
@@ -42,9 +43,11 @@ function App() {
         <Route element={<AdminPrivateRoutes />}>
           <Route path="/adminDashboard" element={<AdminDashboard />} />
           <Route path="/qrCode" element={<QRCodeGenerate />} />
-          <Route path="/employees" element={<Employees />} />
+          {/* <Route path="/employees" element={<Employees />} /> */}
           <Route path="/empsignUp" element={<EmpSignUP />} />
           <Route path="/addEmployee" element={<AddEmployee />} />
+          <Route path="/employees" element={<Employees />} />
+          <Route path="/totaluser" element={<TotalEmployees />} />
         </Route>
 
         {/* <Route path="/empLogin" element={<EmpLogin />} /> */}
@@ -53,6 +56,7 @@ function App() {
           <Route path="/empDashboard" element={<EmployeeDsahboard />} />
           <Route path="/scanner" element={<QRCodeScanner />} />
           <Route path="/attendance" element={<EmpAttendance />} />
+          {/* <Route path="/attendance" element={<FetchEmpData />} /> */}
         </Route>
 
         {/* <Route path="/qrCodegen" element={<QRCodeGenerate />} />

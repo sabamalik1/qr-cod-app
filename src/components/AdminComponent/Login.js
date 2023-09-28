@@ -51,7 +51,7 @@ const reducer = (state, action) => {
 
 function Login() {
   const location = useLocation();
-  console.log("pathname:", location.pathname);
+  // console.log("pathname:", location.pathname);
   const { setUserRole } = useAuth(); // Get setUserRole function from context
   const [state, dispatch] = useReducer(reducer, initialStates);
   const navigate = useNavigate();
@@ -139,7 +139,7 @@ function Login() {
         <div className="w-[900px] h-[500px] shadow-lg background bg-slate-50 absolute left-[270px] top-24 justify-center rounded-2xl px-2 py-2">
           <div>
             <h1 className="text-3xl absolute left-[200px] top-[45px] text-purple-800 font-bold">
-              Admin Login
+               Login
             </h1>
             <h1 className="text-2xl font-bold ml-44 top-[95px] text-purple-800 absolute">
               Hello Friends!

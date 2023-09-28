@@ -18,6 +18,7 @@ const initialStates = {
   // submitBtnDisable: "",
   errorMsg: "",
   salary: "",
+  loading:false,
   jobType: "job type",
   //   isConfirmationOpen: false,
 };
@@ -51,8 +52,13 @@ const reducer = (state, action) => {
     case "SET_JOB_TYPE":
       return {
         ...state,
-        salary: action.payload,
+        jobType: action.payload,
       };
+      case "SET_LOADING":
+        return {
+          ...state,
+          loading: action.payload,
+        };
     // case "SET_IS_CONFIRMATION_OPEN":
     //   return {
     //     ...state,
@@ -83,16 +89,10 @@ export default function AddEmployee() {
     }
   };
   
-
-  //   const handleCancel = () => {
-  //     // Clear form fields and reset to initial state
-  //     dispatch({ type: "RESET_FORM" });
-  //     dispatch({ type: "SET_IS_CONFIRMATION_OPEN", payload:true });
-
-  //     console.log("clear the data ", state.isConfirmationOpen )
-  //   };
   const handleSubmit = async (e) => {
     e.preventDefault();
+    // Set loading to true when the form is submitted
+    dispatch({ type: "SET_LOADING", payload: true });
 
     if (!state.email || !state.password || !state.name || !state.salary) {
       // Display a toast message if any field is empty
@@ -106,10 +106,14 @@ export default function AddEmployee() {
           exit: "animate__animated animate__bounceOut",
         }
       );
+      // Set loading back to false since the form submission failed
+      dispatch({ type: "SET_LOADING", payload: false });
     } else if (state.password.length < 8) {
       toast.error("Password must be at least 8 characters", {
         toastId: "all_characters_filled",
       });
+      // Set loading back to false since the form submission failed
+      dispatch({ type: "SET_LOADING", payload: false });
     } else {
       try {
         // Create a new user account with Firebase
@@ -120,16 +124,18 @@ export default function AddEmployee() {
         );
 
         const user = userCredential.user;
+        // dispatch({ type: "SET_LOADING", payload: false });
+        // console.log("Loding in process")
         // Create an object with user data
         const userData = {
           uid: user.uid,
           name: state.name,
           email: state.email,
-          salary: state.salary,
-          jobType: state.jobType,
-
-          //   role: auth.currentUser.getIdTokenResult() ? "employee" : "admin",
+          salary:state.salary,
+          jobType:state.jobType,
+          // role: auth.currentUser.getIdTokenResult() ? "employee" : "admin",
         };
+        console.log(userData);
         // // Store user data in cloud forestore under their UID
         try {
           // Add a new document with a generated id.
@@ -145,6 +151,9 @@ export default function AddEmployee() {
         await updateProfile(user, {
           displayName: state.name,
         });
+        // Set loading back to false after successful authentication
+        dispatch({ type: "SET_LOADING", payload: false });
+        console.log("Loading completed");
         // navigate("/");
 
         toast.success("Registration successful", {
@@ -164,11 +173,13 @@ export default function AddEmployee() {
           //   payload: "Email is already in use.",
           // });
         }
+        // Set loading back to false after handling errors
+        dispatch({ type: "SET_LOADING", payload: false });
       }
     }
-    // dispatch({ type: "SET_SUBMIT_BTN_DISABLE", payload: false });
-    // dispatch({type:"RESET_FORM"})
   };
+    
+  
   return (
     <form>
       <div className="flex items-center justify-center">

@@ -20,7 +20,7 @@ const navigation = [
 ];
 const userNavigation = [
   { name: "Your Profile", href: "#" },
-  { name: "Settings", href: "#" },
+  // { name: "Settings", href: "#" },
   { name: "Sign out", href: "#" },
 ];
 
@@ -221,9 +221,7 @@ export default function EmployeeDashboard() {
         <main>
           <div className="mx-auto max-w-7xl py-6 sm:px-6 lg:px-8">
             {/* Your content */}
-            <Link to="/scanner">Scanner</Link>
-            <Link to="/empLogin" className="ml-5 ">Login</Link>
-            <button className="ml-20" onClick={handleSignout} >Logout</button>
+           
           </div>
         </main>
       </div>
@@ -231,81 +229,4 @@ export default function EmployeeDashboard() {
   );
 }
 
-// import {
-//   MenuFoldOutlined,
-//   MenuUnfoldOutlined,
-//   UploadOutlined,
-//   UserOutlined,
-//   VideoCameraOutlined,
-// } from "@ant-design/icons";
-// import { Layout, Menu, Button, theme } from "antd";
-// import { Link } from "react-router-dom";
-// const { Header, Sider, Content } = Layout;
-// const EmployeeDashboard = () => {
-//   const [collapsed, setCollapsed] = useState(false);
-//   const {
-//     token: { colorBgContainer },
-//   } = theme.useToken();
-//   return (
-//     <Layout>
-//       <Sider trigger={null} collapsible collapsed={collapsed}>
-//         <div className="demo-logo-vertical" />
-//         <Menu
-//           theme="dark"
-//           mode="inline"
-//           defaultSelectedKeys={["1"]}
-//           items={[
-//             {
-//               key: "1",
-//               icon: <UserOutlined />,
-//               label: "nav 1",
-//             },
-//             {
-//               key: "2",
-//               icon: <VideoCameraOutlined />,
-//               label: "nav 2",
-//             },
-//             {
-//               key: "3",
-//               icon: <UploadOutlined />,
-//               label: "nav 3",
-//             },
-//           ]}
-//         />
-//       </Sider>
-//       <Layout>
-//         <Header
-//           style={{
-//             padding: 0,
-//             background: colorBgContainer,
-//           }}
-//         >
-//           <Button
-//             type="text"
-//             icon={collapsed ? <MenuUnfoldOutlined /> : <MenuFoldOutlined />}
-//             onClick={() => setCollapsed(!collapsed)}
-//             style={{
-//               fontSize: "16px",
-//               width: 64,
-//               height: 64,
-//             }}
-//           />
-//           <Link to="/adminDashboard">To Admin dashboard</Link>
-//           <Link to="/scanner" className="ml-16">sacnner</Link>
-//         </Header>
-//         <Content
-//           style={{
-//             margin: "24px 16px",
-//             padding: 24,
-//             minHeight: 280,
-//             background: colorBgContainer,
-//           }}
 
-//         >
-//           Content
-//         </Content>
-//       </Layout>
-//     </Layout>
-//   );
-// };
-// export default EmployeeDashboard;

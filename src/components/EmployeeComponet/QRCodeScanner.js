@@ -60,7 +60,7 @@ function QRCodeScanner() {
     const user = auth.currentUser;
     const uid = auth.currentUser.uid;
     const userName = user.displayName;
-    const email = user.email;
+    // const email = user.email;
 
     // Fetch the user data based on UID
     // const user = await getUser(auth, uid);
@@ -94,27 +94,18 @@ function QRCodeScanner() {
           status: "Present",
         });
 
-        // const inTime = currentDate.toISOString()
-        // const status = "Present"
-        // data.dates.push({
-        //   date: currentDate,
-        //   inTime: inTime,
-        //   status: status,
-        // });
-
-        // data.dates.push({date: currentDate , inTime:"" , outTime:"", status: "present"})
         await setDoc(docRef, attendanceData, { merge: true });
         alert("Attendance marked successfully");
       } else {
         alert("Already marked for today");
       }
-      // To-Do Update the existing document
+      //  Update the existing document
       // Push the data in existing dates array and set it
     } else {
-      // To-Do let create a new document
+      //  let create a new document
       const newAttendanceData = {
         userName, // Use userName instead of UserName
-        email, // Use email instead of email
+        // email, 
         dates: [
           {
             date: currentDate,
@@ -134,7 +125,9 @@ function QRCodeScanner() {
       await setDoc(docRef, newAttendanceData);
       alert("Attendance marked");
     }
+    
   };
+
 
   const validateQRCode = async (scannedCode) => {
     // if (currentUser) {
@@ -167,7 +160,7 @@ function QRCodeScanner() {
 
   return (
     <div>
-      <h1 className=" mb-16 ">QR Code Scanner</h1>
+      <h1 className=" mb-16 text-center text-2xl font-bold justify-center ">QR Code Scanner</h1>
       {!validating && (
         <QrReader
           delay={1500}
@@ -179,89 +172,9 @@ function QRCodeScanner() {
         />
       )}
       {/* <p>Current QR Code Content: {qrCodeContent}</p> */}
-    </div>
-
-    // <div>
-    //   <h1>QRCodeScanner</h1>
-    //   <button className="w-[200px] h-[40px]"
-    //   onClick={toggleCamera}>
-    //     {isCameraOpen ? "Close Camera" : "Off Camera"}
-    //   </button>
-    //   {isCameraOpen && (
-    //     <QrReader>
-    //       delay={delay}
-    //       onScan={handleScan}
-    //       onError={handleError}
-    //       constraints={{
-    //       video: { facingMode: "environment" },
-    //     }}
-    //       {/* style={{ width: 320, height: 420 }} */}
-    //       {/* style={{ width: previewStyle.width, height: previewStyle.height }} */}
-    //     </QrReader>
-    //   )}
-
-    //   <p>{result}</p>
-    // </div>
+    </div>  
   );
 }
 
 export default QRCodeScanner;
 
-// const validateQRCode = (code) => {
-//   if (currentUser) {
-//     // Extract UID and timestamp from the QR code
-//     const [uid, timestamp] = code.split(":");
-
-//     // Perform Firebase database operations to validate and mark attendance
-//     const db = app.database();
-//     const date = new Date().toLocaleDateString();
-//     const time = new Date().toLocaleTimeString();
-
-//     // Check if the code is valid and mark attendance
-//     db.ref(`code/${uid}`).once("value", (snapshot) => {
-//       const savedCode = snapshot.val();
-
-//       if (code === savedCode) {
-//         const attendanceRef = db.ref(`employee/${currentUser.uid}/attendance/${date}`);
-
-//         attendanceRef.once("value", (attendanceSnapshot) => {
-//           const attendance = attendanceSnapshot.val();
-
-//           if (!attendance) {
-//             const newAttendance = {
-//               in: time,
-//               status: "present",
-//             };
-
-//             attendanceRef.set(newAttendance);
-//             console.log("In Time marked");
-//           } else if (!attendance.out && attendance.status !== "leave") {
-//             attendance.out = time;
-//             attendanceRef.update(attendance);
-//             console.log("Out Time marked");
-//           } else {
-//             console.log("Already Marked Attendance");
-//           }
-//         });
-//       } else {
-//         console.log("Invalid QR Code");
-//       }
-//     });
-//   } else {
-//     console.error("User not authenticated.");
-//   }
-// };
-
-// const handleScan = (data) => {
-//   setResult(data);
-// };
-// const handleError = (err) => {
-//   console.error(err);
-// };
-// // const previewStyle = {
-// //   height: 240,
-// //   width: 320,
-// // };
-// const toggleCamera = () => {
-//   setIsCameraOpen(!isCameraOpen);
-// };

@@ -1,62 +1,65 @@
 import React, { useReducer } from "react";
-// import { useAuth } from "./AuthContext";
+import { useAuth } from "../AuthContext";
 import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faEye, faEyeSlash } from "@fortawesome/free-solid-svg-icons";
 import { Link, useLocation, useNavigate } from "react-router-dom";
 import { auth } from "../../firebase";
-import { useAuth } from "../AuthContext";
 import { signInWithEmailAndPassword } from "firebase/auth";
+// import LoadingSpinner from "./LoadingSpinner";
 
-// const initialStates = {
-//   name: "",
-//   email: "",
-//   password: "",
-//   showPassword: false,
-//   loading: false,
-// };
-// const reducer = (state, action) => {
-//   switch (action.type) {
-//     case "SET_EMAIL":
-//       return {
-//         ...state,
-//         email: action.payload,
-//       };
-//     case "SET_PASSWORD":
-//       return {
-//         ...state,
-//         password: action.payload,
-//       };
-//     case "TOGGLE_PASSWORD_VISIBILITY":
-//       return {
-//         ...state,
-//         showPassword: !state.showPassword,
-//       };
-//     case "SET_LOADING":
-//       return {
-//         ...state,
-//         loading: action.payload,
-//       };
-//     case "RESET_FORM":
-//       return {
-//         initialStates,
-//       };
+const initialStates = {
+  name: "",
+  email: "",
+  password: "",
+  showPassword: false,
+  loading: false,
+};
+const reducer = (state, action) => {
+  switch (action.type) {
+    case "RESET_FORM":
+      return {
+        ...initialStates,
+      };
+    case "SET_EMAIL":
+      return {
+        ...state,
+        email: action.payload,
+      };
+    case "SET_PASSWORD":
+      return {
+        ...state,
+        password: action.payload,
+      };
+    case "TOGGLE_PASSWORD_VISIBILITY":
+      return {
+        ...state,
+        showPassword: !state.showPassword,
+      };
 
-//     default:
-//       return state;
-//   }
-// };
+    case "SET_LOADING":
+      return {
+        ...state,
+        loading: action.payload,
+      };
+
+    default:
+      return state;
+  }
+};
 
 function EmpLogin() {
   const location = useLocation();
-  // console.log(location.pathname);
-  const { setUserRole, initialStates, reducer } = useAuth(); // Get setUserRole function from context
+  // console.log("pathname:", location.pathname);
+  const { setUserRole } = useAuth(); // Get setUserRole function from context
   const [state, dispatch] = useReducer(reducer, initialStates);
   const navigate = useNavigate();
+
   const handleSubmit = async (e) => {
     e.preventDefault();
-    dispatch({ type: "SET_LOADING" });
+    // Set loading to true when the form is submitted
+    dispatch({ type: "SET_LOADING", payload: true });
     if (!state.email || !state.password) {
       // Display a toast message if any field is empty
       toast.error(
@@ -69,10 +72,14 @@ function EmpLogin() {
           exit: "animate__animated animate__bounceOut",
         }
       );
+      // Set loading back to false since the form submission failed
+      dispatch({ type: "SET_LOADING", payload: false });
     } else if (state.password.length < 8) {
       toast.error("Password must be at least 8 characters", {
         toastId: "all_characters_filled",
       });
+      // Set loading back to false since the form submission failed
+      dispatch({ type: "SET_LOADING", payload: false });
     } else {
       try {
         // Create a new user account with Firebase
@@ -83,13 +90,14 @@ function EmpLogin() {
         );
 
         const user = userCredential.user;
-        // navigate("/")
+        // To-Do set loading to false here
+        dispatch({ type: "SET_LOADING", payload: false });
+        // navigate("/");
 
         toast.success("Registration successful", {
           toastId: "all_validation_passed",
         });
         const userClaims = await auth.currentUser.getIdTokenResult();
-
         const path = location.pathname;
         if (userClaims.claims?.admin) {
           console.log("User is an admin.");
@@ -102,13 +110,15 @@ function EmpLogin() {
         }
 
         dispatch({ type: "RESET_FORM", payload: "" });
+        // dispatch({ type: "SET_EMAIL", payload: "" });
+        // dispatch({ type: "SET_PASSWORD", payload: "" });
       } catch (error) {
         if (error.code === "auth/wrong-password") {
           toast.error("Incorrect password. Please try again.", {
             toastId: "incorrect_password",
           });
         } else if (error.code === "auth/user-not-found") {
-          toast.error("Incorrect password and user not found.", {
+          toast.error("Incorrect password. Please try again.", {
             toastId: "incorrect_password",
           });
         } else {
@@ -117,17 +127,19 @@ function EmpLogin() {
               toastId: "Email_already_exist",
             });
           }
+          // set loading to false here
+          dispatch({ type: "SET_LOADING", payload: false });
         }
       }
     }
   };
   return (
     <>
-      <div className="w-screen h-screen bg-purple-400 absolute">
-        <div className="w-[900px] h-[500px] background bg-slate-50 absolute left-[270px] top-24 justify-center rounded-2xl px-2 py-2">
+      <div className="w-full h-full bg-purple-400 absolute">
+        <div className="w-[900px] h-[500px] shadow-lg background bg-slate-50 absolute left-[270px] top-24 justify-center rounded-2xl px-2 py-2">
           <div>
             <h1 className="text-3xl absolute left-[200px] top-[45px] text-purple-800 font-bold">
-              Login
+              Employee Login
             </h1>
             <h1 className="text-2xl font-bold ml-44 top-[95px] text-purple-800 absolute">
               Hello Friends!
@@ -178,11 +190,16 @@ function EmpLogin() {
               <button
                 onClick={handleSubmit}
                 type="button"
-                // disabled={true}
+                disabled={state.loading ? true : false}
                 className="top-[340px] bg-purple-500 text-white px-4 py-2 w-[280px] h-[40px] absolute left-[120px] rounded-md hover:bg-purple-400"
               >
-                Submit
+                {state.loading ? "Loading..." : "Submit"}
               </button>
+              {/* {state.loading && (
+                <div>
+                  Loading...
+                </div>
+              )} */}
               <h4 className="top-[400px] absolute ml-28 text-purple-800">
                 Don't have an account?
                 <Link
