@@ -86,14 +86,8 @@ function EmpAttendance() {
 
   return (
     <div>
-      <h1>Employee Attendance</h1>
+      <h1>Employee Informetion</h1>
 
-      <div>
-        
-        <p></p>
-        <p></p>
-        <p></p>
-      </div>
       <div>
         <div className="flex text-center justify-center  background px-3 py-3  ">
           <div className=" p-5 rounded-lg shadow-lg mb-5 w-[600px] h-[350px] background bg-purple-700 mt-32  ">

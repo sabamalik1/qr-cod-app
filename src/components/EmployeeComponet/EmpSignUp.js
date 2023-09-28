@@ -13,8 +13,6 @@ const initialStates = {
   email: "",
   password: "",
   showPassword: false,
-  // submitBtnDisable: "",
-  // errorMsg: "",
   loading: false,
 };
 const reducer = (state, action) => {
@@ -39,16 +37,7 @@ const reducer = (state, action) => {
         ...state,
         showPassword: !state.showPassword,
       };
-    // case "SET_SUBMIT_BTN_DISABLE":
-    //   return {
-    //     ...state,
-    //     submitBtnDisable: action.payload,
-    //   };
-    // case "SET_ERROR_MSG":
-    //   return {
-    //     ...state,
-    //     errorMsg: action.payload,
-    //   };
+    
     case "RESET_FORM":
       return {
         ...initialStates,
@@ -103,8 +92,7 @@ function EmpSignUP() {
         );
 
         const user = userCredential.user;
-        // dispatch({ type: "SET_LOADING", payload: false });
-        // console.log("Loding in process")
+       
         // Create an object with user data
         const userData = {
           uid: user.uid,
@@ -138,16 +126,12 @@ function EmpSignUP() {
         dispatch({ type: "RESET_FORM", payload: "" });
       } catch (error) {
         if (error.code === "auth/email-already-in-use") {
-          // To-Do - emit toast for email already exist and use toastId for it
+          // emit toast for email already exist and use toastId for it
           toast.error("Email is already in use.", {
             toastId: "Email_already_exist",
           });
 
-          // Set the error message state when email is already in use
-          // dispatch({
-          //   type: "SET_ERROR_MSG",
-          //   payload: "Email is already in use.",
-          // });
+        
         }
         // Set loading back to false after handling errors
         dispatch({ type: "SET_LOADING", payload: false });
@@ -159,7 +143,7 @@ function EmpSignUP() {
       <div className="w-full h-full bg-purple-400 absolute">
         <div className="w-[900px] h-[500px] background bg-slate-50 shadow-lg absolute left-[270px] top-24 justify-center rounded-2xl px-2 py-2">
           <div>
-            <h1 className="text-3xl absolute left-[200px] top-[18px] text-purple-800 font-bold">
+            <h1 className="text-3xl absolute left-[140px] top-[18px] text-purple-800 font-bold">
               Employee SignUp
             </h1>
             <h1 className="text-2xl font-bold ml-44 top-[70px] text-purple-800 absolute">
@@ -224,11 +208,7 @@ function EmpSignUP() {
               >
                 {state.loading ? "Loading..." : "Submit"}
               </button>
-              {/* {state.loading && (
-                <div className="text-white absolute top-[370px] left-[120px]">
-                  Loading...
-                </div>
-              )} */}
+             
               <h4 className="top-[420px] absolute ml-28 text-purple-800">
                 Already have an account?{" "}
                 <Link
@@ -238,11 +218,7 @@ function EmpSignUP() {
                   Login
                 </Link>
               </h4>
-              {/* {state.errorMsg && (
-                <div className="text-red-500 text-center top-[390px] absolute ml-28">
-                  {state.errorMsg}
-                </div>
-              )} */}
+              
             </form>
           </div>
           <div className="w-[400px] h-[500px] text-white top-0 right-0 absolute background  bg-purple-800 rounded-tl-none rounded-tr-2xl rounded-bl-none rounded-br-2xl">
@@ -258,45 +234,3 @@ function EmpSignUP() {
 
 export default EmpSignUP;
 
-// const user = firebase.auth().currentUser;
-
-// if (user) {
-//   // Check the user's custom claims to determine their role
-//   const idTokenResult = await user.getIdTokenResult();
-//   const userRole = idTokenResult.claims.role;
-
-//   if (userRole === 'admin') {
-//     // Grant admin privileges
-//   } else if (userRole === 'employee') {
-//     // Grant employee privileges
-//   } else {
-//     // Handle unknown role or unauthorized access
-//   }
-// }
-
-// const unsubscribeOnAuthStateChanged = auth.onAuthStateChanged(
-//   async (user) => {
-//     if (user) {
-//       // User is authenticated
-//       try {
-//         const idTokenResult = await user.getIdTokenResult();
-//         const customClaims = idTokenResult.claims;
-
-//         // Check the user's role
-//         if (customClaims.role === "admin") {
-//           console.log("User is an admin");
-//           // User is an admin
-//           // Redirect to admin dashboard or show admin-specific content
-//         } else {
-//           console.log("User is an employee");
-//           // User is an employee
-//           // Redirect to employee dashboard or show employee-specific content
-//         }
-//       } catch (error) {
-//         console.error("Error getting custom claims:", error);
-//       }
-//     } else {
-//       // User is not authenticated
-//     }
-//   }
-// );

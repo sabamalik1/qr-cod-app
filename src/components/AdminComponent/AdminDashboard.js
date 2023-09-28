@@ -12,6 +12,7 @@ import {
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 
 import TotalEmployees from "./TotalEmployees";
+import Employees from "./Employees";
 
 export default function AdminDashboard({ totalUsers }) {
   const { handleSignout } = useAuth();
@@ -79,6 +80,13 @@ export default function AdminDashboard({ totalUsers }) {
               <FontAwesomeIcon icon={faUsers} className="mr-2" />
               Total Employees
             </Link>
+            {/* <Link
+              to={"/stats"}
+              className="text-gray-300 hover:bg-purple-400 hover:text-white px-4 py-2 rounded-md block"
+            >
+              <FontAwesomeIcon icon={faUsers} className="mr-2" />
+              Total Stats
+            </Link> */}
             <button
               onClick={handleSignout}
               className="text-gray-300 hover:bg-purple-400 hover:text-white px-4 py-2 rounded-md block"
@@ -131,6 +139,7 @@ export default function AdminDashboard({ totalUsers }) {
                 </div>
               </div>
             </div>
+            <Employees />
           </main>
         </div>
       </div>

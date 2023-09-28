@@ -8,6 +8,7 @@ import { useNavigate } from "react-router-dom";
 function Employees() {
   const navigate = useNavigate();
   const [employeeData, setEmployeeData] = useState([]);
+  
   // const [loading, setLoading] = useState(true);
 
   const handleAddEmployeeClick = () => {
@@ -66,47 +67,26 @@ function Employees() {
         console.log("Attendance Data:", attendanceData);
         console.log("Employee Data:", empData);
 
-        // Combine employee data and attendance data
+        
 
-        // const empData = [];
-        const newEmpData = empData.map((employee, index) => {
-          // console.log(
-          //   "employee attendance data:",
-          //   attendanceData[employee.uid]
-          // );
-          const isPresent = attendanceData[employee.uid]?.dates.some(
-            (entry) =>
+        // Calculate attendance count and mark as Present
+        const newEmpData = empData.map((employee) => {
+          const uid = employee.uid;
+          const isPresent = attendanceData[uid]?.dates.map((entry) => {
+            return (
               convertTimestamp(entry.date, "firebase") ===
               convertTimestamp(Date.now())
-          );
+            );
+          });
 
-          if (isPresent) {
-            empData[index].isPresent = isPresent;
-            console.log("Attendance for", empData);
-            return empData[index];
-          }
-
-          // Filter attendance dates for the current month with status "Present"
-          // const currentMonth = new Date().getMonth() + 1; // +1 because getMonth() returns a zero-based index (0 for January)
-          // const presentDates = (attendance?.length || []).filter(
-          //   (dateEntry) => {
-          //     // console.log("date entry",dateEntry )
-          //     const date = dateEntry.date.toDate(); // Convert Firestore Timestamp to JavaScript Date
-          //     // console.log("current month ", currentMonth);
-          //     // console.log("date:", date);
-          //     return (
-          //       date.getMonth() + 1 === currentMonth &&
-          //       dateEntry.status === "Present"
-          //     );
-          //   }
-          // );
-
-          // Calculate attendance count
-          // const attendanceCount = presentDates.length;
-          // console.log("Attendance count", attendanceCount);
+          return {
+            ...employee,
+            attendanceCount: attendanceData[uid]?.dates.length || 0,
+            isPresent: isPresent,
+          };
         });
         console.log(newEmpData);
-        setEmployeeData(empData);
+        setEmployeeData(newEmpData);
 
         // Set the employee data and mark loading as false
 
@@ -127,7 +107,7 @@ function Employees() {
     <>
       <div className="container mx-auto mt-10">
         <div className="flex flex-row px-2 py-2 justify-between">
-          <h1 className="text-2xl font-semibold mb-4">Employees Information</h1>
+          <h1 className="text-3xl font-semibold mb-4 text-purple-800">Employees Information</h1>
           <button
             type="submit"
             onClick={handleAddEmployeeClick}
@@ -156,7 +136,7 @@ function Employees() {
                 <td className="border border-gray-300 p-2">{employee.name}</td>
                 <td className="border border-gray-300 p-2">{employee.email}</td>
                 <td className="border border-gray-300 p-2">
-                  {employee.attendanceCount}
+                  {employee.isPresent ? "Present" : "Absent"}
                 </td>
 
                 {/* <td className="border border-gray-300 p-2">
@@ -196,13 +176,7 @@ function Employees() {
           </li>
         ))}
       </ul> */}
-      {/* <ul>
-        {employeeData.map((employee, index) => {
-          <li>
-            EmplyeeName:{employee.name}, Email: {employee.email}
-          </li>;
-        })}
-      </ul> */}
+     
       {/* <FetchEmpData /> */}
     </>
   );

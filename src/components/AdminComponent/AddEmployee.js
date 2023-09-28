@@ -15,12 +15,11 @@ const initialStates = {
   email: "",
   password: "",
   showPassword: false,
-  // submitBtnDisable: "",
   errorMsg: "",
   salary: "",
-  loading:false,
+  loading: false,
   jobType: "job type",
-  //   isConfirmationOpen: false,
+ 
 };
 const reducer = (state, action) => {
   switch (action.type) {
@@ -54,16 +53,11 @@ const reducer = (state, action) => {
         ...state,
         jobType: action.payload,
       };
-      case "SET_LOADING":
-        return {
-          ...state,
-          loading: action.payload,
-        };
-    // case "SET_IS_CONFIRMATION_OPEN":
-    //   return {
-    //     ...state,
-    //     isConfirmationOpen: action.payload,
-    //   };
+    case "SET_LOADING":
+      return {
+        ...state,
+        loading: action.payload,
+      };
 
     case "RESET_FORM":
       return {
@@ -88,7 +82,7 @@ export default function AddEmployee() {
       dispatch({ type: "RESET_FORM" });
     }
   };
-  
+
   const handleSubmit = async (e) => {
     e.preventDefault();
     // Set loading to true when the form is submitted
@@ -124,15 +118,13 @@ export default function AddEmployee() {
         );
 
         const user = userCredential.user;
-        // dispatch({ type: "SET_LOADING", payload: false });
-        // console.log("Loding in process")
-        // Create an object with user data
+
         const userData = {
           uid: user.uid,
           name: state.name,
           email: state.email,
-          salary:state.salary,
-          jobType:state.jobType,
+          salary: state.salary,
+          jobType: state.jobType,
           // role: auth.currentUser.getIdTokenResult() ? "employee" : "admin",
         };
         console.log(userData);
@@ -166,20 +158,13 @@ export default function AddEmployee() {
           toast.error("Email is already in use.", {
             toastId: "Email_already_exist",
           });
-
-          // Set the error message state when email is already in use
-          // dispatch({
-          //   type: "SET_ERROR_MSG",
-          //   payload: "Email is already in use.",
-          // });
         }
         // Set loading back to false after handling errors
         dispatch({ type: "SET_LOADING", payload: false });
       }
     }
   };
-    
-  
+
   return (
     <form>
       <div className="flex items-center justify-center">
@@ -340,7 +325,7 @@ export default function AddEmployee() {
               </button>
               {isConfirmationOpen && ( // Display the confirmation dialog if isConfirmationOpen is true
                 <ConfirmDialog
-                  message="Are you sure you want to discard all changes?"
+                  // message="Are you sure you want to discard all changes?"
                   onConfirm={() => {
                     // Clear the form fields here
                     dispatch({ type: "RESET_FORM" });

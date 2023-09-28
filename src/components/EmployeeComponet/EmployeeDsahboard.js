@@ -1,4 +1,4 @@
-import { Fragment, useState } from "react";
+import { Fragment } from "react";
 import { Disclosure, Menu, Transition } from "@headlessui/react";
 import { Bars3Icon, BellIcon, XMarkIcon } from "@heroicons/react/24/outline";
 import { Link } from "react-router-dom";
@@ -29,11 +29,9 @@ function classNames(...classes) {
 }
 
 export default function EmployeeDashboard() {
-  
- const {handleSignout} = useAuth()
+  const { handleSignout } = useAuth();
   return (
     <>
-     
       <div className="min-h-full">
         <Disclosure as="nav" className="bg-purple-700">
           {({ open }) => (
@@ -43,15 +41,9 @@ export default function EmployeeDashboard() {
                   <div className="flex items-center">
                     <div className="flex-shrink-0">
                       {/* <div className="mx-auto max-w-7xl px-4 py-6 sm:px-6 lg:px-8"> */}
-                        <h1 className="text-3xl font-bold tracking-tight text-purple-200 mr-4">
-                          DigiEmployee
-                        </h1>
-                      {/* </div> */}
-                      {/* <img
-                        className="h-8 w-8"
-                        src="https://tailwindui.com/img/logos/mark.svg?color=indigo&shade=500"
-                        alt="Your Company"
-                      /> */}
+                      <h1 className="text-3xl font-bold tracking-tight text-purple-200 mr-4">
+                        DigiEmployee
+                      </h1>
                     </div>
                     <div className="hidden md:block">
                       <div className="ml-10 flex items-baseline space-x-4">
@@ -221,12 +213,12 @@ export default function EmployeeDashboard() {
         <main>
           <div className="mx-auto max-w-7xl py-6 sm:px-6 lg:px-8">
             {/* Your content */}
-           
+            <h1>
+            <Link to="/scanner">scanner</Link>
+          </h1>
           </div>
         </main>
       </div>
     </>
   );
 }
-
-

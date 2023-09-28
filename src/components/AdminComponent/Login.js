@@ -4,10 +4,9 @@ import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faEye, faEyeSlash } from "@fortawesome/free-solid-svg-icons";
-import { Link, useLocation, useNavigate } from "react-router-dom";
+import {  useLocation, useNavigate } from "react-router-dom";
 import { auth } from "../../firebase";
 import { signInWithEmailAndPassword } from "firebase/auth";
-// import LoadingSpinner from "./LoadingSpinner";
 
 const initialStates = {
   name: "",
@@ -110,8 +109,7 @@ function Login() {
         }
 
         dispatch({ type: "RESET_FORM", payload: "" });
-        // dispatch({ type: "SET_EMAIL", payload: "" });
-        // dispatch({ type: "SET_PASSWORD", payload: "" });
+        
       } catch (error) {
         if (error.code === "auth/wrong-password") {
           toast.error("Incorrect password. Please try again.", {
@@ -138,10 +136,10 @@ function Login() {
       <div className="w-full h-full bg-purple-400 absolute">
         <div className="w-[900px] h-[500px] shadow-lg background bg-slate-50 absolute left-[270px] top-24 justify-center rounded-2xl px-2 py-2">
           <div>
-            <h1 className="text-3xl absolute left-[200px] top-[45px] text-purple-800 font-bold">
+            <h1 className="text-3xl absolute left-[210px] top-[45px] text-purple-800 font-bold">
                Login
             </h1>
-            <h1 className="text-2xl font-bold ml-44 top-[95px] text-purple-800 absolute">
+            <h1 className="text-2xl font-bold ml-40 top-[95px] text-purple-800 absolute">
               Hello Friends!
             </h1>
             <h3 className="text-2sm font-sm ml-40 top-[135px] text-purple-800 absolute">
@@ -195,25 +193,17 @@ function Login() {
               >
                 {state.loading ? "Loading..." : "Submit"}
               </button>
-              {/* {state.loading && (
-                <div>
-                  Loading...
-                </div>
-              )} */}
+             
               <h4 className="top-[400px] absolute ml-28 text-purple-800">
-                Don't have an account?
-                <Link
+                Don't have an account? firstly register yourself
+                {/* <Link
                   className="text-xl font-semibold hover:bg-purple-500"
                   to="/signUp"
                 >
                   SignUp
-                </Link>
+                </Link> */}
               </h4>
-              {/* {state.errorMsg && (
-                <div className="text-red-500 text-center top-[390px] absolute ml-28">
-                  {state.errorMsg}
-                </div>
-              )} */}
+             
             </form>
           </div>
           <div className="w-[400px] h-[500px] text-white top-0 right-0 absolute background  bg-purple-800 rounded-tl-none rounded-tr-2xl rounded-bl-none rounded-br-2xl">

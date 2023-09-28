@@ -29,12 +29,7 @@ function EmpPrivateRoutes() {
   // if(userRole != "employee"){
   //   return <Navigate to={"/empSignUp"} replace />
   // }
-  // return (
-  //   <>
-  //     EmpPrivateRoutes
-  //     <Outlet />
-  //   </>
-  // );
+  
 }
 
 export default EmpPrivateRoutes;
